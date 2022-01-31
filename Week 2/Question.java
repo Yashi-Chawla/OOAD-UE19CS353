@@ -14,9 +14,10 @@ class ShortAnswer extends TestQuestion
     void readQuestion()
     {
         Scanner in = new Scanner(System.in);
-        System.out.println("Enter the question: ");
+        System.out.print("Enter the question: ");
         question = in.nextLine();
-        numLines = 1;
+        System.out.print("Enter the number of lines: ");
+        numLines = in.nextInt();
     }
 
     public String toString()
@@ -33,9 +34,9 @@ class LongAnswer extends TestQuestion
     void readQuestion()
     {
         Scanner in = new Scanner(System.in);
-        System.out.println("Enter the question: ");
+        System.out.print("Enter the question: ");
         question = in.nextLine();
-        System.out.println("Enter the number of lines: ");
+        System.out.print("Enter the number of lines: ");
         numLines = in.nextInt();
     }
 
@@ -55,14 +56,16 @@ class MCQ extends TestQuestion
     void readQuestion()
     {   
         Scanner in = new Scanner(System.in);
-        System.out.println("Enter the question: ");
+        System.out.print("Enter the question: ");
         question = in.nextLine();
-        System.out.println("Enter the number of choices: ");
+        System.out.print("Enter the number of choices: ");
         numChoices = in.nextInt();
         choices = new String[numChoices];
+
+        in.nextLine();
         for (int i = 0; i < numChoices; i++)
         {
-            System.out.println("Enter choice " + (i + 1) + ": ");
+            System.out.print("Enter choice " + (i + 1) + ": ");
             choices[i] = in.nextLine();
         }
     }
@@ -84,9 +87,10 @@ class TQManager
     public static void main(String[] args)
     {
         Scanner in = new Scanner(System.in);
-        System.out.println("Enter the number of questions: ");
+        System.out.print("Enter the number of questions: ");
         int numQuestions = in.nextInt();
 
+        String[] questionTypes = new String[numQuestions];
         TestQuestion[] questions = new TestQuestion[numQuestions];
         int questionType;
         for (int i=0; i<numQuestions; i++)
@@ -94,42 +98,53 @@ class TQManager
             System.out.println("1. Short Answer");
             System.out.println("2. Long Answer");
             System.out.println("3. Multiple Choice");
-            System.out.println("Enter the question type: ");
+            System.out.println();
+            System.out.print("Enter the question type: ");
             questionType = in.nextInt();
+            System.out.println();
 
             Boolean valid = false;
             switch(questionType)
             {
                 case 1:
                     questions[i] = new ShortAnswer();
-                    valid = true;
+                    questions[i].readQuestion();
+                    questionTypes[i] = "Short Answer";
                     break;
                 case 2:
                     questions[i] = new LongAnswer();
-                    valid = true;
+                    questions[i].readQuestion();
+                    questionTypes[i] = "Long Answer";
                     break;
                 case 3:
                     questions[i] = new MCQ();
-                    valid = true;
+                    questions[i].readQuestion();
+                    questionTypes[i] = "Multiple Choice";
                     break;
                 default:
-                    System.out.println("Invalid question type");
+                    System.out.println("Invalid question type!");
                     break;
             }
-
-            if (valid)
-            {
-                questions[i].readQuestion();
-            }
+            System.out.println();
         }
 
         System.out.println("\nQuestion details: \n");
-        for (int i=0; i<numQuestions; i++)
+        String[] uniqueQuestionTypes = {"Short Answer", "Long Answer", "Multiple Choice"};
+        for (int j=0; j<3; j++)
         {
-            String str = questions[i].toString();
-            System.out.println("Question " + (i + 1) + ": ");
-            System.out.println(str);
-            System.out.println();
+            String uniqueQuestionType = uniqueQuestionTypes[j];
+            System.out.println(uniqueQuestionType + " Question details: \n");
+            for (int i=0; i<numQuestions; i++)
+            {
+
+                if (questionTypes[i].equals(uniqueQuestionType))
+                {
+                    String str = questions[i].toString();
+                    System.out.println("Question " + (i + 1) + " - " + questionTypes[i] + ": ");
+                    System.out.println(str);
+                    System.out.println();
+                }
+            }
         }
     }
 }
