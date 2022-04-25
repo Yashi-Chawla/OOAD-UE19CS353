@@ -1,0 +1,1 @@
+javac -cp ".:lib/*" controller.java model.java view.java && java -cp ".:lib/*" Application
